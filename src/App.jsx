@@ -1,12 +1,8 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { Box } from "@mui/material";
+
 import QuoteCard from "./components/QuoteCard";
-import { animeSelect } from "./const";
+import QuoteGenerator from "./components/QuoteGenerator";
 
 function App() {
   const [animeQuotes, setAnimeQuotes] = useState();
@@ -36,29 +32,11 @@ function App() {
         marginTop: "12px",
       }}
     >
-      <FormControl sx={{ width: "275px", margin: "auto" }}>
-        <InputLabel id="Anime">Anime</InputLabel>
-        <Select
-          labelId="Anime"
-          id="anime"
-          value={selectedAnime}
-          label="Anime"
-          onChange={handleChange}
-        >
-          {animeSelect.map((anime) => (
-            <MenuItem key={anime} value={anime}>
-              {anime}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Button
-        sx={{ width: "275px" }}
-        variant="contained"
-        onClick={handleGenerateQuote}
-      >
-        Generate Quote
-      </Button>
+      <QuoteGenerator
+        selectedAnime={selectedAnime}
+        onSelect={handleChange}
+        onGenerateQuote={handleGenerateQuote}
+      />
       {animeQuotes?.map((quote) => {
         return <QuoteCard key={quote.quote} quote={quote} />;
       })}
