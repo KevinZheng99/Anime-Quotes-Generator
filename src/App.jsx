@@ -4,13 +4,14 @@ import { Box } from "@mui/material";
 import QuoteCard from "./components/QuoteCard";
 import QuoteGenerator from "./components/QuoteGenerator";
 import QuotesContainer from "./components/QuotesContainer";
+import PaginationBar from "./components/PaginationBar";
 
 function App() {
   const [animeQuotes, setAnimeQuotes] = useState();
   const [selectedAnime, setSelectedAnime] = useState("");
 
-  function handleGenerateQuote() {
-    fetch(
+  async function handleGenerateQuote() {
+    await fetch(
       `https://animechan.xyz/api/quotes${
         selectedAnime ? "/anime?title=" + selectedAnime : ""
       }`
@@ -19,11 +20,19 @@ function App() {
       .then((quote) => setAnimeQuotes(quote));
   }
 
-  function handleChange(event) {
+  function handleChangeAnime(event) {
     setSelectedAnime(event.target.value);
   }
 
-  console.log(animeQuotes);
+  async function handleChangePage(event, value) {
+    await fetch(
+      `https://animechan.xyz/api/quotes${
+        selectedAnime ? "/anime?title=" + selectedAnime : ""
+      }${selectedAnime ? "&page=" + value : "?page=" + value}`
+    )
+      .then((response) => response.json())
+      .then((quote) => setAnimeQuotes(quote));
+  }
 
   return (
     <Box
@@ -37,9 +46,10 @@ function App() {
     >
       <QuoteGenerator
         selectedAnime={selectedAnime}
-        onSelect={handleChange}
+        onSelect={handleChangeAnime}
         onGenerateQuote={handleGenerateQuote}
       />
+      {animeQuotes && <PaginationBar onChange={handleChangePage} />}
       {animeQuotes && (
         <QuotesContainer>
           {animeQuotes?.map((quote) => {
