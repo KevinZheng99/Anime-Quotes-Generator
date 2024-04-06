@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 
 import QuoteCard from "./components/QuoteCard";
 import QuoteGenerator from "./components/QuoteGenerator";
+import QuotesContainer from "./components/QuotesContainer";
 
 function App() {
   const [animeQuotes, setAnimeQuotes] = useState();
@@ -22,6 +23,8 @@ function App() {
     setSelectedAnime(event.target.value);
   }
 
+  console.log(animeQuotes);
+
   return (
     <Box
       sx={{
@@ -37,9 +40,13 @@ function App() {
         onSelect={handleChange}
         onGenerateQuote={handleGenerateQuote}
       />
-      {animeQuotes?.map((quote) => {
-        return <QuoteCard key={quote.quote} quote={quote} />;
-      })}
+      {animeQuotes && (
+        <QuotesContainer>
+          {animeQuotes?.map((quote) => {
+            return <QuoteCard key={quote.quote} quote={quote} />;
+          })}
+        </QuotesContainer>
+      )}
     </Box>
   );
 }
